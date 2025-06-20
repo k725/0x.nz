@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0x.nz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Matrix-like background effect */
+        .matrix-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.1;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: #0ff;
+            animation: matrix-fall linear infinite;
+            text-shadow: 0 0 5px #0ff;
+        }
+        
+        .matrix-column:nth-child(1) { left: 5%; animation-duration: 8s; animation-delay: 0s; }
+        .matrix-column:nth-child(2) { left: 15%; animation-duration: 10s; animation-delay: 2s; }
+        .matrix-column:nth-child(3) { left: 25%; animation-duration: 9s; animation-delay: 1s; }
+        .matrix-column:nth-child(4) { left: 35%; animation-duration: 12s; animation-delay: 3s; }
+        .matrix-column:nth-child(5) { left: 45%; animation-duration: 11s; animation-delay: 0.5s; }
+        .matrix-column:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: 2.5s; }
+        .matrix-column:nth-child(7) { left: 65%; animation-duration: 10s; animation-delay: 1.5s; }
+        .matrix-column:nth-child(8) { left: 75%; animation-duration: 9s; animation-delay: 4s; }
+        .matrix-column:nth-child(9) { left: 85%; animation-duration: 13s; animation-delay: 0s; }
+        .matrix-column:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 3.5s; }
+        
+        @keyframes matrix-fall {
+            to {
+                top: 100%;
+            }
+        }
+        
+        /* Geometric pattern overlay */
+        .geometric-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Main container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Title styles */
+        .title-wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        
+        /* Glitch effect */
+        .title::before,
+        .title::after {
+            content: '0x.nz';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .title::before {
+            animation: glitch-1 0.5s infinite;
+            color: #0ff;
+            z-index: -1;
+        }
+        
+        .title::after {
+            animation: glitch-2 0.5s infinite;
+            color: #f0f;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, 1px); }
+            80% { clip-path: inset(80% 0 10% 0); transform: translate(1px, -1px); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(80% 0 10% 0); transform: translate(2px, -1px); }
+            40% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 1px); }
+            60% { clip-path: inset(50% 0 20% 0); transform: translate(1px, -2px); }
+            80% { clip-path: inset(20% 0 60% 0); transform: translate(-1px, 2px); }
+        }
+        
+        /* Subtitle styles */
+        .desc {
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fade-in 1s ease-out 0.5s forwards;
+        }
+        
+        .desc a {
+            color: #0ff;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .desc a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #0ff;
+            transition: width 0.3s ease;
+        }
+        
+        .desc a:hover {
+            color: #fff;
+        }
+        
+        .desc a:hover::after {
+            width: 100%;
+        }
+        
+        @keyframes fade-in {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Scanning line effect */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #0ff, transparent);
+            animation: scan 8s linear infinite;
+            opacity: 0.5;
+        }
+        
+        @keyframes scan {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(100vh); }
+        }
+        
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #0ff;
+            opacity: 0.5;
+        }
+        
+        .corner-tl {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-tr {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-bl {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-br {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            .corner {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg">
+        <div class="matrix-column">01001000 01100101 01101100</div>
+        <div class="matrix-column">01101100 01101111 00100000</div>
+        <div class="matrix-column">01010111 01101111 01110010</div>
+        <div class="matrix-column">01101100 01100100 00100001</div>
+        <div class="matrix-column">00110000 01111000 00101110</div>
+        <div class="matrix-column">01101110 01111010 00100000</div>
+        <div class="matrix-column">01010011 01110100 01100001</div>
+        <div class="matrix-column">01110010 01010010 01100001</div>
+        <div class="matrix-column">01101001 01101110 00100000</div>
+        <div class="matrix-column">01001110 01100101 01110100</div>
+    </div>
+    
+    <div class="geometric-bg"></div>
+    
+    <div class="scan-line"></div>
+    
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    
+    <div class="container">
+        <div class="title-wrapper">
+            <h1 class="title">0x.nz</h1>
+        </div>
+        <p class="desc">Powered By <a href="https://starra.in">StarRain Network</a></p>
+    </div>
+</body>
+</html>
